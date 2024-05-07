@@ -25,27 +25,12 @@ function run() {
 
 run();
 
-function sendRequest(url, callback) {
-    return new Promise((resolve, reject) => {
-        const xhr = new XMLHttpRequest();
-        xhr.open("GET", url, true);
-
-        xhr.onreadystatechange = function () {
-            if (xhr.readyState === XMLHttpRequest.DONE) {
-                if (xhr.status === 200) {
-                    resolve(JSON.parse(xhr.response));
-                } else {
-                    reject(xhr.statusText);
-                }
-            }
-        };
-
-        xhr.onerror = function () {
-            reject(xhr.statusText);
-        };
-
-        xhr.send();
-    });
+async function sendRequest(url) {
+    const response = await fetch(url, { method: "GET" });
+    if (response.ok) {
+        return response.json();
+    }
+    throw new Error(response.statusText);
 }
 
 function reqsToMap(requisites) {
